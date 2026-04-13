@@ -14,7 +14,7 @@ export default function HeroCarousel() {
   const [[index, direction], setIndex] = useState([0, 0]);
   const [paused, setPaused] = useState(false);
 
-  // 🔥 PRELOAD IMAGES (IMPORTANT)
+  // Preload images
   useEffect(() => {
     slides.forEach((slide) => {
       const img = new window.Image();
@@ -22,7 +22,7 @@ export default function HeroCarousel() {
     });
   }, []);
 
-  // AUTO PLAY
+  // Autoplay
   useEffect(() => {
     if (paused) return;
 
@@ -42,11 +42,15 @@ export default function HeroCarousel() {
 
   return (
     <section
-      className="relative w-full h-[100vh] overflow-hidden -mt-[60px] md:-mt-[100px]"
+      className="
+        relative w-full overflow-hidden 
+        -mt-[60px] md:-mt-[100px]
+        h-[80vh] md:h-[90vh] lg:h-screen
+      "
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* 🔥 STACKED IMAGES (NO UNMOUNT = NO BLANK) */}
+      {/* Slides */}
       {slides.map((slide, i) => (
         <motion.div
           key={slide.src}
@@ -54,19 +58,19 @@ export default function HeroCarousel() {
           animate={{
             opacity: i === index ? 1 : 0,
             x: i === index ? 0 : direction > 0 ? -80 : 80,
-            scale: i === index ? 1 : 1.05,
+            scale: i === index ? 1 : 1.04,
           }}
           transition={{
-            duration: 0.7,
+            duration: 0.8,
             ease: [0.22, 1, 0.36, 1],
           }}
           drag={i === index ? "x" : false}
           dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.6}
+          dragElastic={0.5}
           onDragEnd={(e, { offset }) => {
             if (i !== index) return;
-            if (offset.x > 100) paginate(-1);
-            else if (offset.x < -100) paginate(1);
+            if (offset.x > 120) paginate(-1);
+            else if (offset.x < -120) paginate(1);
           }}
           className="absolute inset-0"
         >
@@ -75,28 +79,29 @@ export default function HeroCarousel() {
             alt="Hero"
             fill
             priority={i === 0}
+            sizes="100vw"
             className="object-cover object-center"
           />
         </motion.div>
       ))}
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/25" />
+      {/* Overlay (stronger for readability) */}
+      <div className="absolute inset-0 bg-black/30" />
 
       {/* Content */}
       <div className="absolute inset-0 flex items-center justify-center text-center px-4">
         <motion.div
           key={index}
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.7 }}
           className="text-white max-w-xl"
         >
-          <h1 className="text-3xl md:text-5xl font-semibold tracking-tight mb-4">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-4">
             Discover Timeless Elegance
           </h1>
 
-          <p className="text-sm md:text-lg mb-6 opacity-90">
+          <p className="text-sm md:text-lg opacity-90 mb-6">
             Handcrafted collections inspired by tradition
           </p>
 

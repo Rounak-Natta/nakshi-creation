@@ -17,26 +17,19 @@ const menu = [
   { label: "Home", href: "/" },
   {
     label: "Men",
-    children: [
-      "Dhoti",
-      "Kurta",
-      "Kurta Dhoti Set",
-      "Neheru Jacket",
-      "Sherwani",
-      "Shirt",
-    ],
+    children: ["Dhoti","Kurta","Kurta Dhoti Set","Neheru Jacket","Sherwani","Shirt"],
   },
   {
     label: "Women",
-    children: ["Kurti", "Kurti Set", "Bottom", "Saree"],
+    children: ["Kurti","Kurti Set","Bottom","Saree"],
   },
   {
     label: "Accessories",
-    children: ["Jewellery", "Bags"],
+    children: ["Jewellery","Bags"],
   },
   {
     label: "Formal",
-    children: ["Men Shirt", "Women Shirt"],
+    children: ["Men Shirt","Women Shirt"],
   },
 ];
 
@@ -44,8 +37,15 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState<number | null>(1);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [scrolled, setScrolled] = useState(false);
 
-  // prevent scroll on mobile menu
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 40);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     document.documentElement.style.overflow = mobileOpen ? "hidden" : "";
   }, [mobileOpen]);
@@ -55,28 +55,40 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-40 bg-background">
+    <header
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled ? "bg-background shadow-sm" : "bg-transparent"
+      }`}
+    >
+      {/* DOUBLE SEPARATORS */}
+      {scrolled && (
+        <>
+          <div className="absolute top-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#eee] to-transparent" />
+          <div className="absolute bottom-0 w-full h-[1px] bg-[#e5e5e5]" />
+        </>
+      )}
 
       {/* ================= DESKTOP ================= */}
       <div className="hidden md:block">
-        {/* Top bar */}
-        <div className="flex items-center justify-between px-10 py-3 border-b border-[#eee]">
-          <div className="text-sm text-foreground/70">
+        <div className="flex items-center justify-between px-10 py-3">
+          <span className={`${scrolled ? "text-foreground/70" : "text-white"}`}>
             Region: India ⌄
-          </div>
+          </span>
 
-          <Link href="/">
-            <Image src="/logo.webp" alt="logo" width={120} height={40} />
-          </Link>
+          <Image src="/logo.webp" alt="logo" width={120} height={40} />
 
           <div className="flex gap-5">
-            <User className="w-5 h-5 cursor-pointer" />
-            <Heart className="w-5 h-5 cursor-pointer" />
-            <ShoppingBag className="w-5 h-5 cursor-pointer" />
+            {[User, Heart, ShoppingBag].map((Icon, i) => (
+              <Icon
+                key={i}
+                className={`w-5 h-5 ${
+                  scrolled ? "text-foreground" : "text-white"
+                }`}
+              />
+            ))}
           </div>
         </div>
 
-        {/* Navigation */}
         <nav className="flex justify-center gap-8 py-3">
           {menu.map((item, index) => (
             <div
@@ -87,26 +99,23 @@ export default function Navbar() {
             >
               <Link
                 href={item.href || "#"}
-                className="text-sm tracking-wide hover:opacity-70"
+                className={`text-sm ${
+                  scrolled ? "text-foreground" : "text-white"
+                }`}
               >
                 {item.label}
               </Link>
 
-              {/* Dropdown */}
               <AnimatePresence>
                 {item.children && activeIndex === index && (
                   <motion.div
-                    initial={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 8 }}
-                    className="absolute mt-3 bg-background border border-[#eee] shadow-md rounded-md p-4 min-w-[180px]"
+                    exit={{ opacity: 0 }}
+                    className="absolute mt-3 bg-background shadow-md p-4 rounded"
                   >
                     {item.children.map((sub) => (
-                      <Link
-                        key={sub}
-                        href={`/category/${sub.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="block text-sm py-1 text-foreground/70 hover:text-foreground"
-                      >
+                      <Link key={sub} href="#" className="block py-1">
                         {sub}
                       </Link>
                     ))}
@@ -121,45 +130,48 @@ export default function Navbar() {
       {/* ================= MOBILE ================= */}
       <div className="md:hidden">
 
-        {/* Header */}
-        <div className="h-[60px] flex items-center justify-between px-4 border-b border-[#e5e5e5]">
-          <button onClick={() => setMobileOpen(true)}>
-            <Menu className="w-5 h-5" />
-          </button>
+        <div
+          className={`h-[60px] flex items-center justify-between px-4 ${
+            scrolled ? "bg-background" : "bg-transparent"
+          }`}
+        >
+          <Menu
+            onClick={() => setMobileOpen(true)}
+            className={`w-5 h-5 ${
+              scrolled ? "text-foreground" : "text-white"
+            }`}
+          />
 
           <Image src="/logo.webp" alt="logo" width={90} height={28} />
 
           <div className="flex gap-3">
-            <User className="w-4 h-4" />
-            <Heart className="w-4 h-4" />
-            <ShoppingBag className="w-4 h-4" />
+            {[User, Heart, ShoppingBag].map((Icon, i) => (
+              <Icon
+                key={i}
+                className={`w-4 h-4 ${
+                  scrolled ? "text-foreground" : "text-white"
+                }`}
+              />
+            ))}
           </div>
         </div>
 
-        {/* Mobile Menu */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
-              transition={{ duration: 0.25 }}
               className="fixed inset-0 bg-background z-50 flex flex-col"
             >
-              {/* Top */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e5e5]">
-                <span className="text-[17px] font-semibold tracking-tight">
-                  Welcome Nakshi !
-                </span>
-                <button onClick={() => setMobileOpen(false)}>
-                  <X className="w-5 h-5" />
-                </button>
+              <div className="flex justify-between p-5 border-b">
+                <span>Menu</span>
+                <X onClick={() => setMobileOpen(false)} />
               </div>
 
-              {/* Menu */}
               <div className="flex-1 overflow-y-auto">
                 {menu.map((item, index) => (
-                  <div key={item.label} className="border-b border-[#e5e5e5]">
+                  <div key={item.label} className="border-b">
 
                     <div
                       onClick={() =>
@@ -167,64 +179,31 @@ export default function Navbar() {
                           ? toggleAccordion(index)
                           : setMobileOpen(false)
                       }
-                      className="flex items-center justify-between px-5 py-4"
+                      className="flex justify-between px-5 py-4"
                     >
-                      {item.href ? (
-                        <Link href={item.href} className="text-[15px] font-medium">
-                          {item.label}
-                        </Link>
-                      ) : (
-                        <span className="text-[15px] font-medium">
-                          {item.label}
-                        </span>
-                      )}
-
+                      {item.label}
                       {item.children && (
                         <ChevronDown
-                          className={`w-4 h-4 transition ${
-                            openIndex === index ? "rotate-180" : ""
-                          }`}
+                          className={openIndex === index ? "rotate-180" : ""}
                         />
                       )}
                     </div>
 
-                    {/* Children */}
-                    <AnimatePresence>
-                      {item.children && openIndex === index && (
-                        <motion.div
-                          initial={{ height: 0 }}
-                          animate={{ height: "auto" }}
-                          exit={{ height: 0 }}
-                          className="overflow-hidden"
-                        >
-                          {item.children.map((sub) => (
-                            <Link
-                              key={sub}
-                              href={`/category/${sub.toLowerCase().replace(/\s+/g, "-")}`}
-                              onClick={() => setMobileOpen(false)}
-                              className="block px-7 py-3 text-[14px] text-foreground/70 border-t border-[#f0f0f0]"
-                            >
-                              {sub}
-                            </Link>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    {item.children && openIndex === index && (
+                      <div>
+                        {item.children.map((sub) => (
+                          <Link
+                            key={sub}
+                            href="#"
+                            className="block px-7 py-3 border-t"
+                          >
+                            {sub}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
-              </div>
-
-              {/* Social */}
-              <div className="flex justify-center gap-5 py-5 border-t border-[#e5e5e5]">
-                <div className="w-9 h-9 flex items-center justify-center bg-blue-600 text-white text-sm rounded">
-                  f
-                </div>
-                <div className="w-9 h-9 flex items-center justify-center bg-sky-500 text-white text-sm rounded">
-                  x
-                </div>
-                <div className="w-9 h-9 flex items-center justify-center bg-[#8b5e3c] text-white text-sm rounded">
-                  ig
-                </div>
               </div>
             </motion.div>
           )}

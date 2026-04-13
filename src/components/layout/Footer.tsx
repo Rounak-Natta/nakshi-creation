@@ -95,7 +95,7 @@ export default function Footer() {
 
       {/* BOTTOM BAR */}
       <div className="border-t border-[#e5e5e5] py-4 text-center text-sm text-[#4a2e18]/80">
-        © 2025, Nakshi. All Rights Reserved
+        © 2026, Nakshi. All Rights Reserved
       </div>
     </footer>
   );

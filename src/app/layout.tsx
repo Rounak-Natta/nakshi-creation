@@ -39,7 +39,7 @@ export default function RootLayout({
         <main className="flex-1 pt-[65px] md:pt-[100px]">
           {children}
         </main>
-<Footer/>
+        <Footer/>
       </body>
     </html>
   );

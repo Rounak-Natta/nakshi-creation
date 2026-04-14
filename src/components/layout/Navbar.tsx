@@ -63,8 +63,8 @@ export default function Navbar() {
       {/* DOUBLE SEPARATORS */}
       {scrolled && (
         <>
-          <div className="absolute top-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#eee] to-transparent" />
-          <div className="absolute bottom-0 w-full h-[1px] bg-[#e5e5e5]" />
+          <div className="absolute top-0 w-full h-px bg-linear-to-r from-transparent via-[#eee] to-transparent" />
+          <div className="absolute bottom-0 w-full h-px bg-[#e5e5e5]" />
         </>
       )}
 
@@ -131,7 +131,7 @@ export default function Navbar() {
       <div className="md:hidden">
 
         <div
-          className={`h-[60px] flex items-center justify-between px-4 ${
+          className={`h-15 flex items-center justify-between px-4 ${
             scrolled ? "bg-background" : "bg-transparent"
           }`}
         >

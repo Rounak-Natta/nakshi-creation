@@ -86,7 +86,7 @@ export default function Footer() {
 
           <div className="grid grid-cols-2 gap-4 items-center">
             <Image src="/partner/visa.png" alt="Visa" width={80} height={40} />
-            <Image src="/partner/paypal.jpg" alt="PayPal" width={80} height={40} />
+            <Image src="/partner/paypal.png" alt="PayPal" width={80} height={40} />
             <Image src="/partner/stripe.png" alt="Stripe" width={80} height={40} />
             <Image src="/partner/verisign.png" alt="Verisign" width={80} height={40} />
           </div>

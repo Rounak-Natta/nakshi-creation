@@ -91,6 +91,17 @@ export default function BestSeller() {
           <h3 className="text-lg md:text-xl font-medium mb-2">
             Ethnic Red Saree with Kurta Set
           </h3>
+          <p className="text-sm text-[#4b2e2b]/70 leading-relaxed mb-3 max-w-md">
+  Handcrafted ethnic ensemble featuring intricate traditional patterns,
+  breathable fabric, and a timeless silhouette—perfect for festive
+  occasions and elegant everyday wear.
+</p>
+
+<p className="text-sm text-[#4b2e2b]/60 leading-relaxed mb-5 max-w-md">
+  Designed for modern elegance, this piece blends heritage craftsmanship
+  with contemporary styling. Its soft drape and refined finish ensure
+  comfort without compromising on sophistication.
+</p>
 
           <div className="flex items-center gap-3 mb-4">
             <p className="font-semibold">₹6999.00</p>

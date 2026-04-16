@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
   { src: "/hero1.png" },
@@ -10,28 +10,41 @@ const slides = [
   { src: "/hero3.webp" },
 ];
 
+const variants = {
+  enter: (dir: number) => ({
+    x: dir > 0 ? 100 : -100,
+    opacity: 0,
+    scale: 1.05,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+  },
+  exit: (dir: number) => ({
+    x: dir > 0 ? -100 : 100,
+    opacity: 0,
+    scale: 1.05,
+  }),
+};
+
 export default function HeroCarousel() {
   const [[index, direction], setIndex] = useState([0, 0]);
   const [paused, setPaused] = useState(false);
 
-  // Preload images
-  useEffect(() => {
-    slides.forEach((slide) => {
-      const img = new window.Image();
-      img.src = slide.src;
-    });
-  }, []);
-
-  // Autoplay
+  // Stable autoplay (no reset bug)
   useEffect(() => {
     if (paused) return;
 
     const interval = setInterval(() => {
-      paginate(1);
+      setIndex(([prev]) => [
+        (prev + 1) % slides.length,
+        1,
+      ]);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [paused, index]);
+  }, [paused]);
 
   const paginate = (dir: number) => {
     setIndex(([prev]) => [
@@ -43,58 +56,55 @@ export default function HeroCarousel() {
   return (
     <section
       className="
-        relative w-full overflow-hidden 
-        -mt-15 md:-mt-25
-        h-[80vh] md:h-[90vh] lg:h-screen
-      "
+        relative w-full overflow-hidden
+h-[calc(100vh-65px)] md:h-[calc(100vh-100px)]      "
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       {/* Slides */}
-      {slides.map((slide, i) => (
+      <AnimatePresence initial={false} custom={direction}>
         <motion.div
-          key={slide.src}
-          initial={false}
-          animate={{
-            opacity: i === index ? 1 : 0,
-            x: i === index ? 0 : direction > 0 ? -80 : 80,
-            scale: i === index ? 1 : 1.04,
-          }}
+          key={index}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
           transition={{
             duration: 0.8,
             ease: [0.22, 1, 0.36, 1],
           }}
-          drag={i === index ? "x" : false}
+          drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.5}
           onDragEnd={(e, { offset }) => {
-            if (i !== index) return;
-            if (offset.x > 120) paginate(-1);
-            else if (offset.x < -120) paginate(1);
+            const threshold = window.innerWidth * 0.25;
+            if (offset.x > threshold) paginate(-1);
+            else if (offset.x < -threshold) paginate(1);
           }}
           className="absolute inset-0"
         >
           <Image
-            src={slide.src}
+            src={slides[index].src}
             alt="Hero"
             fill
-            priority={i === 0}
+            priority
             sizes="100vw"
             className="object-cover object-center"
           />
         </motion.div>
-      ))}
+      </AnimatePresence>
 
-      {/* Overlay (stronger for readability) */}
-      <div className="absolute inset-0 bg-black/30" />
+      {/* Gradient Overlay (premium look) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/50" />
 
       {/* Content */}
       <div className="absolute inset-0 flex items-center justify-center text-center px-4">
         <motion.div
           key={index}
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.6 }}
           className="text-white max-w-xl"
         >
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-4">
@@ -120,6 +130,7 @@ export default function HeroCarousel() {
               setIndex([i, i > index ? 1 : -1])
             }
             className="relative h-2 w-6"
+            aria-label={`Go to slide ${i + 1}`}
           >
             <div
               className={`absolute inset-0 rounded-full transition ${

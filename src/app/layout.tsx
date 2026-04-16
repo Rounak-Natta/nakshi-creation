@@ -7,13 +7,13 @@ import Footer from "@/components/layout/Footer";
 const playfair = Playfair_Display({
   variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["500", "600", "700"], // cleaner weights
+  weight: ["500", "600", "700"],
 });
 
 const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500"], // tighter look
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -31,15 +31,17 @@ export default function RootLayout({
       lang="en"
       className={`${playfair.variable} ${inter.variable}`}
     >
-      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased">
+      <body className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)] antialiased">
 
+        {/* Fixed Navbar */}
         <Navbar />
 
-        {/* Better spacing for mobile */}
-        <main className="flex-1 pt-[65px] md:pt-[100px]">
+        {/* Main Content (offset for fixed navbar height) */}
+        <main className="flex-1 mt-[65px] md:mt-[100px]">
           {children}
         </main>
-        <Footer/>
+
+        <Footer />
       </body>
     </html>
   );

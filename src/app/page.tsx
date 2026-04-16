@@ -3,6 +3,7 @@ import HeroCarousel from "@/components/ui/HeroCarousel";
 import InstagramSection from "@/components/ui/InstagramSection";
 import ProductBanner from "@/components/ui/ProductBanner";
 import ProductCarousel from "@/components/ui/ProductCarousel";
+import ProductHotspot from "@/components/ui/ProductHotspot";
 import YtVideo from "@/components/ui/YtVideo";
 
 // shared demo data (can later come from API)
@@ -26,7 +27,11 @@ export default function Home() {
 
       <ProductBanner />
 
+
       <BestSeller />
+
+      <ProductHotspot/>
+
 
       <ProductCarousel
         title="Parampara Collection"

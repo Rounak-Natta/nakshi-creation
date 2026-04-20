@@ -24,12 +24,12 @@ const menu = [
     children: ["Kurti", "Kurti Set", "Bottom", "Saree"],
   },
   {
-    label: "Accessories",
-    children: ["Jewellery", "Bags"],
+    label: "Couple",
+    children: ["Option 1", "Option 2"],
   },
   {
-    label: "Formal",
-    children: ["Men Shirt", "Women Shirt"],
+    label: "Accessories",
+    children: ["Jewellery", "Bags"],
   },
 ];
 

@@ -48,56 +48,19 @@ export default function Navbar() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  // ✨ animation variants
-  const containerVariants = {
-    hidden: {},
-    show: {
-      transition: { staggerChildren: 0.06 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    show: { opacity: 1, x: 0 },
-  };
-
   return (
     <>
       {/* ================= HEADER ================= */}
-      <header className="fixed top-0 left-0 w-full z-40 bg-[var(--background)]/90 backdrop-blur-xl">
+      <header className="fixed top-0 left-0 w-full z-40 bg-[var(--background)]/90 backdrop-blur-xl border-b border-neutral-200/40">
 
         {/* subtle top glow */}
         <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-neutral-300/50 to-transparent" />
 
         {/* ===== DESKTOP ===== */}
-        <div className="hidden md:block">
-          <div className="flex items-center justify-between px-10 py-3">
-            <span className="text-[var(--foreground)]/70 text-sm">
-              Region: India ⌄
-            </span>
+        <div className="hidden md:grid grid-cols-3 items-center px-10 h-[90px]">
 
-            <Image
-              src="/logo.webp"
-              alt="logo"
-              width={120}
-              height={40}
-              sizes="120px"
-            />
-
-            <div className="flex gap-5">
-              {[User, Heart, ShoppingBag].map((Icon, i) => (
-                <Icon
-                  key={i}
-                  className="w-5 h-5 text-[var(--foreground)] hover:opacity-70 transition"
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* subtle divider */}
-          <div className="mx-10 h-px bg-gradient-to-r from-transparent via-neutral-300/40 to-transparent" />
-
-          <nav className="flex justify-center gap-8 py-3">
+          {/* LEFT: NAV ITEMS */}
+          <nav className="flex gap-8 items-center">
             {menu.map((item, index) => (
               <div
                 key={item.label}
@@ -112,25 +75,26 @@ export default function Navbar() {
                   }, 150);
                 }}
               >
-                <Link className="text-sm relative group" href="#">
+                <Link href="#" className="text-sm relative group">
                   {item.label}
                   <span className="absolute left-0 -bottom-1 h-px w-0 bg-current transition-all duration-300 group-hover:w-full" />
                 </Link>
 
+                {/* DROPDOWN */}
                 <AnimatePresence>
                   {item.children && activeIndex === index && (
                     <motion.div
-                      initial={{ opacity: 0, y: 12 }}
+                      initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 8 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute mt-4 bg-[var(--background)] shadow-xl p-4 rounded-xl min-w-[200px]"
+                      className="absolute top-full mt-4 bg-[var(--background)] shadow-xl p-4 rounded-xl min-w-[200px]"
                     >
                       {item.children.map((sub) => (
                         <Link
                           key={sub}
                           href="#"
-                          className="block py-1 text-sm hover:opacity-70 transition"
+                          className="block py-1 text-sm hover:opacity-70"
                         >
                           {sub}
                         </Link>
@@ -141,9 +105,30 @@ export default function Navbar() {
               </div>
             ))}
           </nav>
+
+          {/* CENTER: LOGO */}
+          <div className="flex justify-center">
+            <Image
+              src="/logo.webp"
+              alt="logo"
+              width={120}
+              height={40}
+              priority
+            />
+          </div>
+
+          {/* RIGHT: ICONS */}
+          <div className="flex justify-end gap-5">
+            {[User, Heart, ShoppingBag].map((Icon, i) => (
+              <Icon
+                key={i}
+                className="w-5 h-5 text-[var(--foreground)] hover:opacity-70 transition cursor-pointer"
+              />
+            ))}
+          </div>
         </div>
 
-        {/* ===== MOBILE BAR ===== */}
+        {/* ===== MOBILE ===== */}
         <div className="md:hidden flex items-center justify-between px-4 h-[65px]">
           <Menu onClick={() => setMobileOpen(true)} className="w-5 h-5" />
 
@@ -152,7 +137,6 @@ export default function Navbar() {
             alt="logo"
             width={90}
             height={28}
-            sizes="90px"
           />
 
           <div className="flex gap-3">
@@ -163,7 +147,7 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* ================= OVERLAY ================= */}
+      {/* ================= MOBILE DRAWER ================= */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -175,7 +159,6 @@ export default function Navbar() {
               onClick={() => setMobileOpen(false)}
             />
 
-            {/* ================= DRAWER ================= */}
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
@@ -183,32 +166,21 @@ export default function Navbar() {
               transition={{ type: "spring", stiffness: 260, damping: 30 }}
               className="fixed top-0 left-0 w-[85%] max-w-sm h-screen bg-[var(--background)] z-[999] flex flex-col shadow-2xl"
             >
-              {/* Top */}
               <div className="flex justify-between items-center px-5 py-5">
                 <span className="text-lg font-medium">Menu</span>
                 <X onClick={() => setMobileOpen(false)} />
               </div>
 
-              {/* Items */}
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-                className="flex-1 overflow-y-auto px-3"
-              >
+              <div className="flex-1 overflow-y-auto px-3">
                 {menu.map((item, index) => (
-                  <motion.div
-                    key={item.label}
-                    variants={itemVariants}
-                    className="mb-2"
-                  >
+                  <div key={item.label} className="mb-2">
                     <div
                       onClick={() =>
                         item.children
                           ? toggleAccordion(index)
                           : setMobileOpen(false)
                       }
-                      className="flex justify-between items-center px-4 py-3 rounded-lg active:scale-[0.97] transition"
+                      className="flex justify-between items-center px-4 py-3 rounded-lg"
                     >
                       <span className="text-sm">{item.label}</span>
 
@@ -227,14 +199,13 @@ export default function Navbar() {
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.25 }}
                           className="overflow-hidden pl-6"
                         >
                           {item.children.map((sub) => (
                             <Link
                               key={sub}
                               href="#"
-                              className="block py-2 text-sm opacity-80 hover:opacity-100 transition"
+                              className="block py-2 text-sm opacity-80"
                             >
                               {sub}
                             </Link>
@@ -242,9 +213,9 @@ export default function Navbar() {
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </motion.div>
+                  </div>
                 ))}
-              </motion.div>
+              </div>
             </motion.div>
           </>
         )}

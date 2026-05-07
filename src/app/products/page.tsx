@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import FilterSidebar from "@/components/products/filtaration";
 
 type Product = {
@@ -89,18 +90,26 @@ const products: Product[] = [
   },
 ];
 
-export default function ShopPage() {
-  const [selectedPrice, setSelectedPrice] = useState<string[]>([]);
-  const [selectedCollection, setSelectedCollection] = useState<string[]>([]);
-  const [selectedDiscount, setSelectedDiscount] = useState<string[]>([]);
+export default function ProductsPage() {
+  const [selectedPrice, setSelectedPrice] =
+    useState<string[]>([]);
+
+  const [selectedCollection, setSelectedCollection] =
+    useState<string[]>([]);
+
+  const [selectedDiscount, setSelectedDiscount] =
+    useState<string[]>([]);
+
   const [mobileFiltersOpen, setMobileFiltersOpen] =
     useState(false);
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
+
       const priceMatch =
         selectedPrice.length === 0 ||
         selectedPrice.some((range) => {
+
           if (range === "0-1000") {
             return product.price <= 1000;
           }
@@ -128,6 +137,7 @@ export default function ShopPage() {
       const discountMatch =
         selectedDiscount.length === 0 ||
         selectedDiscount.some((discount) => {
+
           if (discount === "10") {
             return product.discount >= 10;
           }
@@ -157,10 +167,12 @@ export default function ShopPage() {
 
   return (
     <div className="min-h-screen bg-background">
+
       <div className="mx-auto max-w-[1400px] px-4 py-6 md:px-8 lg:px-10">
 
         {/* MOBILE HEADER */}
         <div className="mb-6 flex items-center justify-between lg:hidden">
+
           <div>
             <h1 className="text-3xl font-medium text-[#4a2e18]">
               Dhoti
@@ -200,6 +212,7 @@ export default function ShopPage() {
 
             {/* DESKTOP HEADER */}
             <div className="mb-8 hidden items-center justify-between lg:flex">
+
               <div>
                 <h1 className="text-[42px] font-medium tracking-tight text-[#4a2e18]">
                   Dhoti
@@ -219,12 +232,16 @@ export default function ShopPage() {
 
             {/* PRODUCT GRID */}
             <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 xl:grid-cols-4">
+
               {filteredProducts.map((product) => (
-                <div
+                <Link
+                  href={`/products/${product.id}`}
                   key={product.id}
-                  className="group cursor-pointer"
+                  className="group block cursor-pointer"
                 >
+
                   <div className="relative overflow-hidden rounded-sm bg-[#f3efe6]">
+
                     <Image
                       src={product.image}
                       alt={product.name}
@@ -239,11 +256,13 @@ export default function ShopPage() {
                   </div>
 
                   <div className="mt-3">
+
                     <h3 className="line-clamp-2 text-sm leading-[1.3] text-[#4a2e18]">
                       {product.name}
                     </h3>
 
                     <div className="mt-2 flex items-center gap-2">
+
                       <span className="text-base font-medium text-[#4a2e18]">
                         ₹ {product.price}
                       </span>
@@ -257,7 +276,7 @@ export default function ShopPage() {
                       Free Size Dhoti
                     </p>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
 

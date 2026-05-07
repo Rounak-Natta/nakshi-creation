@@ -6,13 +6,39 @@ import ProductCarousel from "@/components/ui/ProductCarousel";
 import ProductHotspot from "@/components/ui/ProductHotspot";
 import YtVideo from "@/components/ui/YtVideo";
 
-// shared demo data (can later come from API)
+// Shared demo data (can later come from API)
 const demoProducts = [
-  { id: 1, src: "/products/1.webp" },
-  { id: 2, src: "/products/2.webp" },
-  { id: 3, src: "/products/3.webp" },
-  { id: 4, src: "/products/4.webp" },
-  { id: 5, src: "/products/5.webp" },
+  {
+    id: 1,
+    src: "/products/1.webp",
+    sizes:
+      "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw",
+    priority: true,
+  },
+  {
+    id: 2,
+    src: "/products/2.webp",
+    sizes:
+      "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw",
+  },
+  {
+    id: 3,
+    src: "/products/3.webp",
+    sizes:
+      "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw",
+  },
+  {
+    id: 4,
+    src: "/products/4.webp",
+    sizes:
+      "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw",
+  },
+  {
+    id: 5,
+    src: "/products/5.webp",
+    sizes:
+      "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw",
+  },
 ];
 
 export default function Home() {
@@ -27,11 +53,9 @@ export default function Home() {
 
       <ProductBanner />
 
-
       <BestSeller />
 
-      <ProductHotspot/>
-
+      <ProductHotspot />
 
       <ProductCarousel
         title="Parampara Collection"
@@ -48,8 +72,9 @@ export default function Home() {
         products={demoProducts}
       />
 
-      <YtVideo/>
-      <InstagramSection/>
+      <YtVideo />
+
+      <InstagramSection />
     </>
   );
 }

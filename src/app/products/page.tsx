@@ -27,7 +27,7 @@ const products: Product[] = [
   },
   {
     id: 2,
-    name: "Black Traditional Printed Dhoti",
+    name: "Yellow Traditional Printed Dhoti",
     price: 1299,
     size: ["Free Size"],
     collection: "Traditional",

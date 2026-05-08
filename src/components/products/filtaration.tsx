@@ -174,7 +174,7 @@ function SidebarContent({
               ×
             </button>
           )}
-        </div>
+        </div>   
       </div>
 
       {/* Price */}

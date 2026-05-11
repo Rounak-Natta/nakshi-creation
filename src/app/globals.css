@@ -1,25 +1,143 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fbfbf1;
-  --foreground: #4a2e18;
+  --background: #f6f1eb;
+  --surface: #fbf8f4;
+
+  --foreground: #24160f;
+  --muted: #6b5a4d;
+
+  --border: #e8ddd1;
+
+  --accent: #8b5e3c;
+  --accent-soft: #c6a98f;
+
+  --section-spacing: 7rem;
+  --container: 1440px;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+
+  --color-border: var(--border);
+
+  --color-accent: var(--accent);
+
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-heading);
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+
+  font-family: var(--font-body), sans-serif;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  overflow-x: hidden;
 }
 
-/* Headings */
-h1, h2, h3, h4, h5 {
+/* TYPOGRAPHY */
+
+h1,
+h2,
+h3,
+h4,
+h5 {
   font-family: var(--font-heading), serif;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  font-weight: 500;
+}
+
+p {
+  line-height: 1.8;
+}
+
+/* PREMIUM CONTAINER */
+
+.container-luxury {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+@media (min-width: 768px) {
+  .container-luxury {
+    padding-inline: 40px;
+  }
+}
+
+/* SECTION SPACING */
+
+.section-padding {
+  padding-block: var(--section-spacing);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --section-spacing: 4.5rem;
+  }
+}
+
+/* IMAGE FEEL */
+
+.editorial-image {
+  overflow: hidden;
+  border-radius: 28px;
+}
+
+.editorial-image img {
+  transition: transform 700ms ease;
+}
+
+.editorial-image:hover img {
+  transform: scale(1.04);
+}
+
+/* BUTTON */
+
+.btn-luxury {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 56px;
+
+  padding-inline: 32px;
+
+  border: 1px solid var(--foreground);
+
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+
+  transition: all 300ms ease;
+}
+
+.btn-luxury:hover {
+  background: var(--foreground);
+  color: white;
+}
+
+/* SELECTION */
+
+::selection {
+  background: var(--foreground);
+  color: white;
 }

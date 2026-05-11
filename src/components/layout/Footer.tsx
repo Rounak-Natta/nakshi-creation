@@ -63,8 +63,8 @@ export default function Footer() {
           </h3>
 
           <div className="flex flex-col gap-2 text-[15px] text-[#4a2e18]/80">
-            <Link href="#" className="hover:underline">
-              Shipping policy
+            <Link href="/about" className="hover:underline">
+              About Nakshi
             </Link>
             <Link href="#" className="hover:underline">
               Refund Policy
@@ -74,6 +74,9 @@ export default function Footer() {
             </Link>
             <Link href="#" className="hover:underline">
               Terms of Service
+            </Link>
+            <Link href="/contact" className="hover:underline">
+              Contact Us
             </Link>
           </div>
         </div>

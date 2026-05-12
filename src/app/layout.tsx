@@ -5,6 +5,7 @@ import "./globals.css";
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import BackToTop from "@/components/ui/BackToTop";
 
 const playfair = Playfair_Display({
   variable: "--font-heading",
@@ -20,7 +21,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Nakshi",
-  description: "Luxury handcrafted fashion rooted in Indian heritage.",
+  description:
+    "Luxury handcrafted fashion rooted in Indian heritage.",
 };
 
 export default function RootLayout({
@@ -41,6 +43,8 @@ export default function RootLayout({
         </main>
 
         <Footer />
+
+        <BackToTop />
       </body>
     </html>
   );

@@ -6,6 +6,8 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BackToTop from "@/components/ui/BackToTop";
+import LayoutShell from "@/components/layout/LayoutShell";
+
 
 const playfair = Playfair_Display({
   variable: "--font-heading",
@@ -36,16 +38,10 @@ export default function RootLayout({
       className={`${playfair.variable} ${inter.variable}`}
     >
       <body>
-        <Navbar />
-
-        <main className="pt-[72px] md:pt-[88px]">
-          {children}
-        </main>
-
-        <Footer />
-
-        <BackToTop />
-      </body>
+  <LayoutShell>
+    {children}
+  </LayoutShell>
+</body>
     </html>
   );
 }

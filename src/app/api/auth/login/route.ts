@@ -23,10 +23,7 @@ export async function POST(
     const password =
       body.password?.trim();
 
-    console.log(
-      "LOGIN ATTEMPT:",
-      email
-    );
+    
 
     //
     // VALIDATION
@@ -76,10 +73,6 @@ export async function POST(
     // PASSWORD CHECK
     //
 
-    console.log(
-      "DB HASH:",
-      user.password
-    );
 
     const isPasswordValid =
       await bcrypt.compare(
@@ -87,10 +80,7 @@ export async function POST(
         user.password
       );
 
-    console.log(
-      "PASSWORD VALID:",
-      isPasswordValid
-    );
+   
 
     if (!isPasswordValid) {
       return NextResponse.json(
@@ -114,10 +104,6 @@ export async function POST(
         role: user.role,
       });
 
-    console.log(
-      "LOGIN SUCCESS:",
-      user.email
-    );
 
     //
     // RESPONSE

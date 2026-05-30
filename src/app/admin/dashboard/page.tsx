@@ -4,15 +4,6 @@ import { RecentOrders } from "@/components/admin/recent-orders";
 export default function AdminDashboard() {
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="font-heading text-5xl">
-          Dashboard
-        </h1>
-
-        <p className="mt-3 text-muted">
-          Welcome back.
-        </p>
-      </div>
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <StatCard

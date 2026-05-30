@@ -7,7 +7,7 @@ const orders = [
   },
   {
     id: "#1025",
-    customer: "Ankit",
+    customer: "Ankita",
     amount: "₹4,499",
     status: "Pending",
   },

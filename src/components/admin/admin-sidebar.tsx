@@ -46,12 +46,8 @@ export function AdminSidebar() {
     <aside className="w-72 border-r border-border bg-white">
       <div className="border-b border-border p-6">
         <h2 className="font-heading text-2xl">
-          Nakshi
+          Nakshi Creations
         </h2>
-
-        <p className="mt-1 text-sm text-muted">
-          Admin Panel
-        </p>
       </div>
 
       <nav className="space-y-2 p-4">

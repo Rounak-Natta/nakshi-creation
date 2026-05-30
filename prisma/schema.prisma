@@ -1,0 +1,461 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//
+// ======================================================
+// ENUMS
+// ======================================================
+//
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  OUT_OF_STOCK
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+//
+// ======================================================
+// USER
+// ======================================================
+//
+
+model User {
+  id            String        @id @default(cuid())
+
+  name          String?
+  email         String        @unique
+  password      String
+
+  role          UserRole      @default(USER)
+
+  //
+  // RELATIONS
+  //
+
+  orders        Order[]
+  cart          Cart?
+
+  //
+  // TIMESTAMPS
+  //
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+//
+// ======================================================
+// CATEGORY
+// ======================================================
+//
+
+model Category {
+  id            String        @id @default(cuid())
+
+  name          String        @unique
+  slug          String        @unique
+
+  image         String?
+
+  //
+  // RELATIONS
+  //
+
+  products      Product[]
+
+  //
+  // TIMESTAMPS
+  //
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+//
+// ======================================================
+// PRODUCT
+// ======================================================
+//
+
+model Product {
+  id                  String                @id @default(cuid())
+
+  //
+  // BASIC
+  //
+
+  title               String
+  slug                String                @unique
+
+  shortDescription    String?
+  description         String
+
+  sku                 String                @unique
+
+  //
+  // PRICING
+  //
+
+  price               Float
+  comparePrice        Float?
+
+  //
+  // INVENTORY
+  //
+
+  stock               Int                   @default(0)
+
+  //
+  // FLAGS
+  //
+
+  featured            Boolean               @default(false)
+
+  status              ProductStatus         @default(PUBLISHED)
+
+  //
+  // CATEGORY
+  //
+
+  categoryId          String
+  category            Category              @relation(fields: [categoryId], references: [id])
+
+  //
+  // RELATIONS
+  //
+
+  images              ProductImage[]
+  variants            ProductVariant[]
+  attributes          ProductAttribute[]
+  tags                ProductTag[]
+
+  orderItems          OrderItem[]
+  cartItems           CartItem[]
+
+  //
+  // SEO
+  //
+
+  seoTitle            String?
+  seoDescription      String?
+
+  //
+  // TIMESTAMPS
+  //
+
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+}
+
+//
+// ======================================================
+// PRODUCT IMAGE
+// ======================================================
+//
+
+model ProductImage {
+  id            String        @id @default(cuid())
+
+  url           String
+  alt           String?
+
+  //
+  // PRODUCT
+  //
+
+  productId     String
+  product       Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  //
+  // TIMESTAMPS
+  //
+
+  createdAt     DateTime      @default(now())
+}
+
+//
+// ======================================================
+// PRODUCT VARIANT
+// ======================================================
+//
+
+model ProductVariant {
+  id            String        @id @default(cuid())
+
+  //
+  // VARIANT
+  //
+
+  size          String?
+  color         String?
+
+  sku           String?       @unique
+
+  //
+  // INVENTORY
+  //
+
+  stock         Int           @default(0)
+
+  //
+  // PRICING
+  //
+
+  price         Float?
+
+  //
+  // PRODUCT
+  //
+
+  productId     String
+  product       Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  //
+  // RELATIONS
+  //
+
+  cartItems     CartItem[]
+
+  //
+  // TIMESTAMPS
+  //
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+//
+// ======================================================
+// PRODUCT ATTRIBUTE
+// ======================================================
+//
+
+model ProductAttribute {
+  id            String        @id @default(cuid())
+
+  name          String
+  value         String
+
+  //
+  // PRODUCT
+  //
+
+  productId     String
+  product       Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  //
+  // TIMESTAMPS
+  //
+
+  createdAt     DateTime      @default(now())
+}
+
+//
+// ======================================================
+// PRODUCT TAG
+// ======================================================
+//
+
+model ProductTag {
+  id            String        @id @default(cuid())
+
+  name          String
+
+  //
+  // PRODUCT
+  //
+
+  productId     String
+  product       Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  //
+  // TIMESTAMPS
+  //
+
+  createdAt     DateTime      @default(now())
+}
+
+//
+// ======================================================
+// ORDER
+// ======================================================
+//
+
+model Order {
+  id                String          @id @default(cuid())
+
+  //
+  // ORDER
+  //
+
+  total             Float
+
+  status            OrderStatus     @default(PENDING)
+
+  //
+  // CUSTOMER
+  //
+
+  userId            String
+  user              User            @relation(fields: [userId], references: [id])
+
+  //
+  // SHIPPING
+  //
+
+  customerName      String?
+
+  phone             String?
+
+  addressLine1      String?
+  addressLine2      String?
+
+  city              String?
+  state             String?
+
+  postalCode        String?
+  country           String?
+
+  //
+  // PAYMENT
+  //
+
+  paymentMethod     String?
+  paymentStatus     String?
+
+  //
+  // RELATIONS
+  //
+
+  items             OrderItem[]
+
+  //
+  // TIMESTAMPS
+  //
+
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+//
+// ======================================================
+// ORDER ITEM
+// ======================================================
+//
+
+model OrderItem {
+  id                String          @id @default(cuid())
+
+  quantity          Int
+
+  price             Float
+
+  //
+  // PRODUCT
+  //
+
+  productId         String
+  product           Product         @relation(fields: [productId], references: [id])
+
+  //
+  // ORDER
+  //
+
+  orderId           String
+  order             Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  //
+  // TIMESTAMPS
+  //
+
+  createdAt         DateTime        @default(now())
+}
+
+//
+// ======================================================
+// CART
+// ======================================================
+//
+
+model Cart {
+  id                String          @id @default(cuid())
+
+  //
+  // USER
+  //
+
+  userId            String          @unique
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  //
+  // RELATIONS
+  //
+
+  items             CartItem[]
+
+  //
+  // TIMESTAMPS
+  //
+
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+//
+// ======================================================
+// CART ITEM
+// ======================================================
+//
+
+model CartItem {
+  id                String              @id @default(cuid())
+
+  quantity          Int                 @default(1)
+
+  //
+  // CART
+  //
+
+  cartId            String
+  cart              Cart                @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  //
+  // PRODUCT
+  //
+
+  productId         String
+  product           Product             @relation(fields: [productId], references: [id])
+
+  //
+  // VARIANT
+  //
+
+  variantId         String?
+  variant           ProductVariant?     @relation(fields: [variantId], references: [id])
+
+  //
+  // TIMESTAMPS
+  //
+
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+}

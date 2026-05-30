@@ -1,6 +1,7 @@
-import Link from "next/link";
-
 import { requireAdmin } from "@/lib/auth/require-admin";
+
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { AdminTopbar } from "@/components/admin/admin-topbar";
 
 interface Props {
   children: React.ReactNode;
@@ -12,31 +13,16 @@ export default async function AdminLayout({
   await requireAdmin();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="border-b bg-white">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <Link
-            href="/admin/dashboard"
-            className="text-lg font-semibold"
-          >
-            Admin Panel
-          </Link>
+    <div className="flex h-screen bg-background">
+      <AdminSidebar />
 
-          <form
-            action="/api/auth/logout"
-            method="POST"
-          >
-            <button
-              type="submit"
-              className="rounded-lg bg-black px-4 py-2 text-sm text-white"
-            >
-              Logout
-            </button>
-          </form>
-        </div>
-      </header>
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <AdminTopbar />
 
-      <main>{children}</main>
+        <main className="flex-1 overflow-y-auto p-8">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

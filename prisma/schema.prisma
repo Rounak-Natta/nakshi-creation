@@ -78,13 +78,16 @@ model Category {
 
   parentId String?
 
-  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
-  children Category[] @relation("CategoryTree")
+  parent Category? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+
+  children Category[] @relation("CategoryHierarchy")
 
   products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([parentId])
 }
 
 //
@@ -112,7 +115,8 @@ model Product {
   // PRICING
   //
 
-  price        Float
+  price Float
+
   comparePrice Float?
 
   //
@@ -134,7 +138,8 @@ model Product {
   //
 
   categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
+
+  category Category @relation(fields: [categoryId], references: [id])
 
   //
   // RELATIONS
@@ -161,6 +166,10 @@ model Product {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([status])
+  @@index([featured])
 }
 
 //

@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+
+import {
+  Inter,
+  Playfair_Display,
+} from "next/font/google";
 
 import "./globals.css";
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BackToTop from "@/components/ui/BackToTop";
-import LayoutShell from "@/components/layout/LayoutShell";
-
+import PageWrapper from "@/components/layout/PageWrapper";
 
 const playfair = Playfair_Display({
   variable: "--font-heading",
@@ -29,19 +32,26 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${playfair.variable} ${inter.variable}`}
     >
-      <body>
-  <LayoutShell>
-    {children}
-  </LayoutShell>
-</body>
+      <body className="min-h-screen bg-white text-black antialiased">
+        <Navbar />
+
+        <PageWrapper>
+          {children}
+        </PageWrapper>
+
+        <Footer />
+
+        <BackToTop />
+      </body>
     </html>
   );
 }

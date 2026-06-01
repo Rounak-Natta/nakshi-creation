@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const paymentMethods = [
   {
@@ -21,12 +24,20 @@ const paymentMethods = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  const hideLayout =
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/auth");
+
+  if (hideLayout) {
+    return null;
+  }
+
   return (
     <footer className="border-t border-stone-200 bg-[#f6f4ed] text-[#4a2e18]">
-      {/* Main Footer */}
       <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-          {/* Brand */}
           <div>
             <Link href="/" aria-label="Nakshi Home">
               <Image
@@ -53,7 +64,6 @@ export default function Footer() {
             </Link>
           </div>
 
-          {/* Contact */}
           <div>
             <h3 className="mb-5 text-lg font-semibold">
               Contact Information
@@ -64,6 +74,7 @@ export default function Footer() {
                 <p className="mb-1 font-semibold uppercase tracking-wide text-[#4a2e18]">
                   Address
                 </p>
+
                 <p>
                   76, EC Block, Sector 1
                   <br />
@@ -75,6 +86,7 @@ export default function Footer() {
                 <p className="mb-1 font-semibold uppercase tracking-wide text-[#4a2e18]">
                   Phone
                 </p>
+
                 <a
                   href="tel:+917604060001"
                   className="hover:text-[#4a2e18]"
@@ -87,13 +99,13 @@ export default function Footer() {
                 <p className="mb-1 font-semibold uppercase tracking-wide text-[#4a2e18]">
                   Working Hours
                 </p>
+
                 <p>Monday – Sunday</p>
                 <p>9:00 AM – 8:00 PM</p>
               </div>
             </div>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h3 className="mb-5 text-lg font-semibold">
               Quick Links
@@ -144,7 +156,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Payment Methods */}
           <div>
             <h3 className="mb-5 text-lg font-semibold">
               Secure Payments
@@ -175,7 +186,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
       <div className="border-t border-stone-200">
         <div className="mx-auto max-w-7xl px-6 py-5 text-center text-sm text-[#4a2e18]/70">
           © {new Date().getFullYear()} Nakshi. All Rights Reserved.

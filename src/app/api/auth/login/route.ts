@@ -23,8 +23,6 @@ export async function POST(
     const password =
       body.password?.trim();
 
-    
-
     //
     // VALIDATION
     //
@@ -52,10 +50,6 @@ export async function POST(
         },
       });
 
-    console.log(
-      "USER FOUND:",
-      !!user
-    );
 
     if (!user) {
       return NextResponse.json(
@@ -79,8 +73,6 @@ export async function POST(
         password,
         user.password
       );
-
-   
 
     if (!isPasswordValid) {
       return NextResponse.json(

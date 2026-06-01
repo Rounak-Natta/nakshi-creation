@@ -3,7 +3,7 @@ import {
   NextResponse,
 } from "next/server";
 
-export function middleware(
+export function proxy(
   req: NextRequest
 ) {
   const token =

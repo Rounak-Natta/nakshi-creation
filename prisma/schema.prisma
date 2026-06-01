@@ -39,27 +39,27 @@ enum OrderStatus {
 //
 
 model User {
-  id            String        @id @default(cuid())
+  id String @id @default(cuid())
 
-  name          String?
-  email         String        @unique
-  password      String
+  name     String?
+  email    String  @unique
+  password String
 
-  role          UserRole      @default(USER)
+  role UserRole @default(USER)
 
   //
   // RELATIONS
   //
 
-  orders        Order[]
-  cart          Cart?
+  orders Order[]
+  cart   Cart?
 
   //
   // TIMESTAMPS
   //
 
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 //
@@ -69,25 +69,22 @@ model User {
 //
 
 model Category {
-  id            String        @id @default(cuid())
+  id String @id @default(cuid())
 
-  name          String        @unique
-  slug          String        @unique
+  name String
+  slug String @unique
 
-  image         String?
+  image String?
 
-  //
-  // RELATIONS
-  //
+  parentId String?
 
-  products      Product[]
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
 
-  //
-  // TIMESTAMPS
-  //
+  products Product[]
 
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 //
@@ -97,73 +94,73 @@ model Category {
 //
 
 model Product {
-  id                  String                @id @default(cuid())
+  id String @id @default(cuid())
 
   //
   // BASIC
   //
 
-  title               String
-  slug                String                @unique
+  title String
+  slug  String @unique
 
-  shortDescription    String?
-  description         String
+  shortDescription String?
+  description      String
 
-  sku                 String                @unique
+  sku String @unique
 
   //
   // PRICING
   //
 
-  price               Float
-  comparePrice        Float?
+  price        Float
+  comparePrice Float?
 
   //
   // INVENTORY
   //
 
-  stock               Int                   @default(0)
+  stock Int @default(0)
 
   //
   // FLAGS
   //
 
-  featured            Boolean               @default(false)
+  featured Boolean @default(false)
 
-  status              ProductStatus         @default(PUBLISHED)
+  status ProductStatus @default(PUBLISHED)
 
   //
   // CATEGORY
   //
 
-  categoryId          String
-  category            Category              @relation(fields: [categoryId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 
   //
   // RELATIONS
   //
 
-  images              ProductImage[]
-  variants            ProductVariant[]
-  attributes          ProductAttribute[]
-  tags                ProductTag[]
+  images     ProductImage[]
+  variants   ProductVariant[]
+  attributes ProductAttribute[]
+  tags       ProductTag[]
 
-  orderItems          OrderItem[]
-  cartItems           CartItem[]
+  orderItems OrderItem[]
+  cartItems  CartItem[]
 
   //
   // SEO
   //
 
-  seoTitle            String?
-  seoDescription      String?
+  seoTitle       String?
+  seoDescription String?
 
   //
   // TIMESTAMPS
   //
 
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 //
@@ -173,23 +170,23 @@ model Product {
 //
 
 model ProductImage {
-  id            String        @id @default(cuid())
+  id String @id @default(cuid())
 
-  url           String
-  alt           String?
+  url String
+  alt String?
 
   //
   // PRODUCT
   //
 
-  productId     String
-  product       Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   //
   // TIMESTAMPS
   //
 
-  createdAt     DateTime      @default(now())
+  createdAt DateTime @default(now())
 }
 
 //
@@ -199,48 +196,48 @@ model ProductImage {
 //
 
 model ProductVariant {
-  id            String        @id @default(cuid())
+  id String @id @default(cuid())
 
   //
   // VARIANT
   //
 
-  size          String?
-  color         String?
+  size  String?
+  color String?
 
-  sku           String?       @unique
+  sku String? @unique
 
   //
   // INVENTORY
   //
 
-  stock         Int           @default(0)
+  stock Int @default(0)
 
   //
   // PRICING
   //
 
-  price         Float?
+  price Float?
 
   //
   // PRODUCT
   //
 
-  productId     String
-  product       Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   //
   // RELATIONS
   //
 
-  cartItems     CartItem[]
+  cartItems CartItem[]
 
   //
   // TIMESTAMPS
   //
 
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 //
@@ -250,23 +247,23 @@ model ProductVariant {
 //
 
 model ProductAttribute {
-  id            String        @id @default(cuid())
+  id String @id @default(cuid())
 
-  name          String
-  value         String
+  name  String
+  value String
 
   //
   // PRODUCT
   //
 
-  productId     String
-  product       Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   //
   // TIMESTAMPS
   //
 
-  createdAt     DateTime      @default(now())
+  createdAt DateTime @default(now())
 }
 
 //
@@ -276,22 +273,22 @@ model ProductAttribute {
 //
 
 model ProductTag {
-  id            String        @id @default(cuid())
+  id String @id @default(cuid())
 
-  name          String
+  name String
 
   //
   // PRODUCT
   //
 
-  productId     String
-  product       Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   //
   // TIMESTAMPS
   //
 
-  createdAt     DateTime      @default(now())
+  createdAt DateTime @default(now())
 }
 
 //
@@ -301,59 +298,59 @@ model ProductTag {
 //
 
 model Order {
-  id                String          @id @default(cuid())
+  id String @id @default(cuid())
 
   //
   // ORDER
   //
 
-  total             Float
+  total Float
 
-  status            OrderStatus     @default(PENDING)
+  status OrderStatus @default(PENDING)
 
   //
   // CUSTOMER
   //
 
-  userId            String
-  user              User            @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   //
   // SHIPPING
   //
 
-  customerName      String?
+  customerName String?
 
-  phone             String?
+  phone String?
 
-  addressLine1      String?
-  addressLine2      String?
+  addressLine1 String?
+  addressLine2 String?
 
-  city              String?
-  state             String?
+  city  String?
+  state String?
 
-  postalCode        String?
-  country           String?
+  postalCode String?
+  country    String?
 
   //
   // PAYMENT
   //
 
-  paymentMethod     String?
-  paymentStatus     String?
+  paymentMethod String?
+  paymentStatus String?
 
   //
   // RELATIONS
   //
 
-  items             OrderItem[]
+  items OrderItem[]
 
   //
   // TIMESTAMPS
   //
 
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 //
@@ -363,31 +360,31 @@ model Order {
 //
 
 model OrderItem {
-  id                String          @id @default(cuid())
+  id String @id @default(cuid())
 
-  quantity          Int
+  quantity Int
 
-  price             Float
+  price Float
 
   //
   // PRODUCT
   //
 
-  productId         String
-  product           Product         @relation(fields: [productId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
 
   //
   // ORDER
   //
 
-  orderId           String
-  order             Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   //
   // TIMESTAMPS
   //
 
-  createdAt         DateTime        @default(now())
+  createdAt DateTime @default(now())
 }
 
 //
@@ -397,27 +394,27 @@ model OrderItem {
 //
 
 model Cart {
-  id                String          @id @default(cuid())
+  id String @id @default(cuid())
 
   //
   // USER
   //
 
-  userId            String          @unique
-  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   //
   // RELATIONS
   //
 
-  items             CartItem[]
+  items CartItem[]
 
   //
   // TIMESTAMPS
   //
 
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 //
@@ -427,35 +424,35 @@ model Cart {
 //
 
 model CartItem {
-  id                String              @id @default(cuid())
+  id String @id @default(cuid())
 
-  quantity          Int                 @default(1)
+  quantity Int @default(1)
 
   //
   // CART
   //
 
-  cartId            String
-  cart              Cart                @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId String
+  cart   Cart   @relation(fields: [cartId], references: [id], onDelete: Cascade)
 
   //
   // PRODUCT
   //
 
-  productId         String
-  product           Product             @relation(fields: [productId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
 
   //
   // VARIANT
   //
 
-  variantId         String?
-  variant           ProductVariant?     @relation(fields: [variantId], references: [id])
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
 
   //
   // TIMESTAMPS
   //
 
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

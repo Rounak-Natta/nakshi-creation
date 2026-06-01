@@ -7,6 +7,15 @@ import {
 
 import { useRouter } from "next/navigation";
 
+interface ParentCategory {
+  id: string;
+  name: string;
+}
+
+interface Props {
+  parentCategories: ParentCategory[];
+}
+
 function generateSlug(
   value: string
 ) {
@@ -20,13 +29,18 @@ function generateSlug(
     );
 }
 
-export default function CategoryForm() {
+export default function CategoryForm({
+  parentCategories,
+}: Props) {
   const router = useRouter();
 
   const [name, setName] =
     useState("");
 
   const [slug, setSlug] =
+    useState("");
+
+  const [parentId, setParentId] =
     useState("");
 
   const [loading, setLoading] =
@@ -52,6 +66,7 @@ export default function CategoryForm() {
             body: JSON.stringify({
               name,
               slug,
+              parentId,
             }),
           }
         );
@@ -61,15 +76,10 @@ export default function CategoryForm() {
 
       if (!response.ok) {
         alert(
-          data.error ||
-            "Failed to create category"
+          data.error
         );
-
         return;
       }
-
-      setName("");
-      setSlug("");
 
       router.push(
         "/admin/categories"
@@ -79,10 +89,6 @@ export default function CategoryForm() {
 
     } catch (error) {
       console.error(error);
-
-      alert(
-        "Something went wrong"
-      );
     } finally {
       setLoading(false);
     }
@@ -90,62 +96,144 @@ export default function CategoryForm() {
 
   return (
     <form
-      onSubmit={handleSubmit}
-      className="mt-8 max-w-xl space-y-6"
-    >
-      <div>
-        <label className="mb-2 block text-sm font-medium">
-          Category Name
-        </label>
+  onSubmit={handleSubmit}
+  className="space-y-6"
+>
+  <div className="space-y-2">
+    <label className="text-sm font-medium">
+      Category Name
+    </label>
 
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => {
-            const value =
-              e.target.value;
+    <input
+      value={name}
+      onChange={(e) => {
+        const value =
+          e.target.value;
 
-            setName(value);
+        setName(value);
 
-            setSlug(
-              generateSlug(value)
-            );
-          }}
-          placeholder="Women's Sarees"
-          required
-          className="w-full rounded-xl border border-border bg-white p-3 outline-none"
-        />
-      </div>
+        setSlug(
+          generateSlug(value)
+        );
+      }}
+      placeholder="Men"
+      className="
+        h-12
+        w-full
+        rounded-2xl
+        bg-zinc-50
+        px-4
+        outline-none
+        ring-1
+        ring-zinc-200
+        transition
+        focus:ring-accent
+      "
+    />
+  </div>
 
-      <div>
-        <label className="mb-2 block text-sm font-medium">
-          Slug
-        </label>
+  <div className="space-y-2">
+    <label className="text-sm font-medium">
+      Slug
+    </label>
 
-        <input
-          type="text"
-          value={slug}
-          onChange={(e) =>
-            setSlug(
-              generateSlug(
-                e.target.value
-              )
-            )
-          }
-          required
-          className="w-full rounded-xl border border-border bg-white p-3 outline-none"
-        />
-      </div>
+    <input
+      value={slug}
+      onChange={(e) =>
+        setSlug(
+          generateSlug(
+            e.target.value
+          )
+        )
+      }
+      className="
+        h-12
+        w-full
+        rounded-2xl
+        bg-zinc-50
+        px-4
+        outline-none
+        ring-1
+        ring-zinc-200
+        transition
+        focus:ring-accent
+      "
+    />
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-xl bg-accent px-5 py-3 text-white transition disabled:cursor-not-allowed disabled:opacity-50"
+    {slug && (
+      <div
+        className="
+          inline-flex
+          rounded-full
+          bg-zinc-100
+          px-3
+          py-1
+          text-xs
+        "
       >
-        {loading
-          ? "Creating..."
-          : "Create Category"}
-      </button>
-    </form>
+        /{slug}
+      </div>
+    )}
+  </div>
+
+  <div className="space-y-2">
+    <label className="text-sm font-medium">
+      Parent Category
+    </label>
+
+    <select
+      value={parentId}
+      onChange={(e) =>
+        setParentId(
+          e.target.value
+        )
+      }
+      className="
+        h-12
+        w-full
+        rounded-2xl
+        bg-zinc-50
+        px-4
+        outline-none
+        ring-1
+        ring-zinc-200
+      "
+    >
+      <option value="">
+        No Parent
+      </option>
+
+      {parentCategories.map(
+        (category) => (
+          <option
+            key={category.id}
+            value={category.id}
+          >
+            {category.name}
+          </option>
+        )
+      )}
+    </select>
+  </div>
+
+  <button
+    type="submit"
+    disabled={loading}
+    className="
+      h-12
+      rounded-2xl
+      bg-accent
+      px-6
+      text-white
+      transition
+      hover:opacity-90
+      disabled:opacity-50
+    "
+  >
+    {loading
+      ? "Creating..."
+      : "Create Category"}
+  </button>
+</form>
   );
 }

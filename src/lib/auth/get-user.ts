@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 
-import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/auth/jwt";
 
 export async function getAuthUser() {
@@ -23,16 +22,8 @@ export async function getAuthUser() {
     return null;
   }
 
-  return prisma.user.findUnique({
-    where: {
-      id: decoded.userId,
-    },
-
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-    },
-  });
+  return {
+    id: decoded.userId,
+    role: decoded.role,
+  };
 }

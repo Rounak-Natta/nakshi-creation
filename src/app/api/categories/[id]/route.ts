@@ -18,6 +18,18 @@ export async function GET(
   const category =
     await prisma.category.findUnique({
       where: { id },
+
+      include: {
+        parent: true,
+
+        children: true,
+
+        _count: {
+          select: {
+            products: true,
+          },
+        },
+      },
     });
 
   if (!category) {
@@ -36,36 +48,105 @@ export async function GET(
     category
   );
 }
-
 export async function PUT(
   req: Request,
   { params }: Props
 ) {
-  const { id } =
-    await params;
+  try {
+    const { id } =
+      await params;
 
-  const body =
-    await req.json();
+    const body =
+      await req.json();
 
-  const {
-    name,
-    slug,
-  } = body;
+    const {
+      name,
+      slug,
+      parentId,
+    } = body;
 
-  const category =
-    await prisma.category.update({
-      where: { id },
-      data: {
-        name,
-        slug,
+    if (!name || !slug) {
+      return NextResponse.json(
+        {
+          error:
+            "Name and slug required",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (parentId === id) {
+      return NextResponse.json(
+        {
+          error:
+            "Category cannot be its own parent",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const existing =
+      await prisma.category.findFirst({
+        where: {
+          id: {
+            not: id,
+          },
+
+          OR: [
+            { name },
+            { slug },
+          ],
+        },
+      });
+
+    if (existing) {
+      return NextResponse.json(
+        {
+          error:
+            "Category already exists",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const category =
+      await prisma.category.update({
+        where: {
+          id,
+        },
+
+        data: {
+          name,
+          slug,
+          parentId:
+            parentId || null,
+        },
+      });
+
+    return NextResponse.json(
+      category
+    );
+
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        error:
+          "Failed to update category",
       },
-    });
-
-  return NextResponse.json(
-    category
-  );
+      {
+        status: 500,
+      }
+    );
+  }
 }
-
 export async function DELETE(
   req: Request,
   { params }: Props
@@ -76,7 +157,10 @@ export async function DELETE(
   const category =
     await prisma.category.findUnique({
       where: { id },
+
       include: {
+        children: true,
+
         _count: {
           select: {
             products: true,
@@ -105,6 +189,21 @@ export async function DELETE(
       {
         error:
           "Category contains products",
+      },
+      {
+        status: 400,
+      }
+    );
+  }
+
+  if (
+    category.children.length >
+    0
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          "Delete child categories first",
       },
       {
         status: 400,

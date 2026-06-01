@@ -2,33 +2,53 @@ import Link from "next/link";
 
 import { prisma } from "@/lib/prisma";
 
-import CategoriesTable from "@/components/admin/categories/CategoriesTable";
+import CategoriesList from "@/components/admin/categories/CategoriesList";
 
 export default async function CategoriesPage() {
   const categories =
     await prisma.category.findMany({
+      where: {
+        parentId: null,
+      },
+
       include: {
+        children: {
+          include: {
+            _count: {
+              select: {
+                products: true,
+              },
+            },
+          },
+
+          orderBy: {
+            name: "asc",
+          },
+        },
+
         _count: {
           select: {
             products: true,
           },
         },
       },
+
       orderBy: {
-        createdAt: "desc",
+        name: "asc",
       },
     });
 
   return (
-    <div>
-      <div className="mb-8 flex items-center justify-between">
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">
             Categories
           </h1>
 
           <p className="mt-2 text-muted">
-            Manage all categories
+            Manage categories and
+            subcategories
           </p>
         </div>
 
@@ -40,7 +60,7 @@ export default async function CategoriesPage() {
         </Link>
       </div>
 
-      <CategoriesTable
+      <CategoriesList
         categories={categories}
       />
     </div>

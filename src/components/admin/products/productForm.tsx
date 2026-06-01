@@ -124,10 +124,21 @@ export default function ProductForm({
       )
     );
 
-  const [
+  const initialParent =
+  categories.find((parent) =>
+    parent.children.some(
+      (child) =>
+        child.id ===
+        initialData?.categoryId
+    )
+  );
+
+const [
   parentCategoryId,
   setParentCategoryId,
-] = useState("");
+] = useState(
+  initialParent?.id ?? ""
+);
 
 const [
   categoryId,
@@ -409,9 +420,16 @@ const childCategories =
 
   <div className="space-y-8">
     <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-zinc-200/60">
-  <h2 className="mb-6 text-xl font-semibold">
+  <div className="mb-6">
+  <h2 className="text-xl font-semibold">
     Organization
   </h2>
+
+  <p className="mt-1 text-sm text-zinc-500">
+    Categorize your product so it
+    appears in the correct collection.
+  </p>
+</div>
 
   <div className="space-y-5">
     <div>
@@ -487,8 +505,10 @@ const childCategories =
         "
       >
         <option value="">
-          Select Sub Category
-        </option>
+  {parentCategoryId
+    ? "Choose Sub Category"
+    : "Select Parent First"}
+</option>
 
         {childCategories.map(
           (child) => (

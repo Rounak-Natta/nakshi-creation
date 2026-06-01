@@ -12,8 +12,19 @@ export default async function ProductsPage() {
       include: {
         category: {
           select: {
-            id: true,
             name: true,
+          },
+        },
+
+        images: {
+          where: {
+            isPrimary: true,
+          },
+
+          take: 1,
+
+          select: {
+            url: true,
           },
         },
 
@@ -37,9 +48,9 @@ export default async function ProductsPage() {
             Products
           </h1>
 
-          <p className="mt-2 text-muted">
-            Manage products, pricing,
-            inventory and visibility.
+          <p className="mt-2 text-zinc-500">
+            Manage your store catalog,
+            inventory and product media.
           </p>
         </div>
 
@@ -53,6 +64,7 @@ export default async function ProductsPage() {
             bg-accent
             px-5
             py-3
+            font-medium
             text-white
             transition
             hover:opacity-90

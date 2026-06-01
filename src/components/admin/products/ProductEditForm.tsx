@@ -1,17 +1,18 @@
 import ProductForm from "./productForm";
 
-interface Props {
-  product: any;
+interface Category {
+  id: string;
+  name: string;
 
-  categories: {
+  children: {
     id: string;
     name: string;
-
-    children: {
-      id: string;
-      name: string;
-    }[];
   }[];
+}
+
+interface Props {
+  product: any;
+  categories: Category[];
 }
 
 export default function ProductEditForm({

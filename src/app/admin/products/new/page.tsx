@@ -30,7 +30,7 @@ export default async function CreateProductPage() {
     });
 
   return (
-    <div className="mx-auto max-w-6xl">
+    <div className="mx-auto max-w-7xl">
       <div
         className="
           rounded-3xl
@@ -62,8 +62,9 @@ export default async function CreateProductPage() {
             </h1>
 
             <p className="mt-2 text-muted">
-              Add a new product to your
-              catalog.
+              Add product information,
+              pricing, inventory,
+              SEO and media.
             </p>
           </div>
         </div>

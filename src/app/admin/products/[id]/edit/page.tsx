@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma";
 
 import ProductEditForm from "@/components/admin/products/ProductEditForm";
 
+import ProductImages from "@/components/admin/products/ProductImages";
+
 interface Props {
   params: Promise<{
     id: string;
@@ -23,6 +25,14 @@ export default async function EditProductPage({
       prisma.product.findUnique({
         where: {
           id,
+        },
+
+        include: {
+          images: {
+            orderBy: {
+              position: "asc",
+            },
+          },
         },
       }),
 
@@ -55,7 +65,7 @@ export default async function EditProductPage({
   }
 
   return (
-    <div className="mx-auto max-w-6xl">
+    <div className="space-y-8">
       <div
         className="
           rounded-3xl
@@ -88,7 +98,8 @@ export default async function EditProductPage({
 
             <p className="mt-2 text-muted">
               Update product details,
-              pricing and inventory.
+              pricing, inventory,
+              SEO and media.
             </p>
           </div>
         </div>
@@ -100,6 +111,11 @@ export default async function EditProductPage({
           />
         </div>
       </div>
+
+      <ProductImages
+        productId={product.id}
+        images={product.images}
+      />
     </div>
   );
 }

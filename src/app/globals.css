@@ -141,3 +141,21 @@ p {
   background: var(--foreground);
   color: white;
 }
+/* Admin Scrollbar */
+
+.admin-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-scrollbar::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 999px;
+}
+
+.admin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a1a1aa;
+}

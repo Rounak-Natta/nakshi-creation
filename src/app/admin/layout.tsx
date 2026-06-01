@@ -13,8 +13,8 @@ export default async function AdminLayout({
   await requireAdmin();
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <AdminSidebar />
+<div className="flex min-h-screen bg-zinc-100">
+        <AdminSidebar />
 
       <div className="flex flex-1 flex-col">
         <AdminTopbar />

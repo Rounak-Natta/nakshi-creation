@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import FilterSidebar from "@/components/products/filtaration";
+import FilterSidebar from "@/components/product/filtaration";
 
 type Product = {
   id: number;
